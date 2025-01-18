@@ -1,0 +1,39 @@
+library(DBI)
+library(RPostgres)
+library(dplyr)
+
+
+db_config <- list(
+  user = 'user',
+  password = 'pass',
+  host = '193.147.50.16',
+  port = '5432',
+  dbname = 'athletics'
+)
+
+# Create a connection
+con <- dbConnect(
+  RPostgres::Postgres(),
+  dbname = db_config$dbname,
+  host = db_config$host,
+  port = db_config$port,
+  user = db_config$user,
+  password = db_config$password
+)
+
+# Lets load the necessary tables
+athletes <- tbl(con, 'athletes') |>
+  collect()
+
+
+
+laps <- tbl(con, 'laps') |>
+  collect()
+
+race_athlete <-  tbl(con, 'race_athlete') |>
+  collect()
+
+
+races <-  tbl(con, 'races') |>
+  collect()
+

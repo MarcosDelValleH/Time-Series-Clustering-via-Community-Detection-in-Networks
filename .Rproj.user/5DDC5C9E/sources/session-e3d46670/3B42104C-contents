@@ -1,0 +1,25 @@
+
+library(tidyverse)
+
+# Merge laps_1500 with athletes on athlete_id
+merged_data <- laps_1500 %>%
+  left_join(athletes, by = c("athlete_id" = "id")) %>%
+  left_join(races %>% dplyr::select(id,temperature,humidity,conditions,competition,stadium_id,round), by = c("race_id" = "id")) %>%
+  left_join(races %>% dplyr::select(id,temperature,humidity,conditions,competition,stadium_id,round), by = c("race_id" = "id")) %>%
+  filter(time >= 10 & time <= 30) # Filter out wrong data
+
+merged_data <- merged_data %>%
+  mutate(sex = case_when(
+    sex == "Women" ~ "FEMALE",
+    sex == "Men" ~ "MALE",
+    TRUE ~ sex
+  ))
+
+
+# General KDE plot for passing times grouped by gender
+# Exclude rows where sex is NA and create the KDE plot
+ggplot(merged_data %>% filter(!is.na(sex)), aes(x = time, fill = sex)) +
+  geom_density(alpha = 0.5) +
+  labs(
+    x = "Passing Time (s)", y = "Density") +
+  theme_minimal()

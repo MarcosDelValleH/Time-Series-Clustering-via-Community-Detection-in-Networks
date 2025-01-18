@@ -1,0 +1,57 @@
+races<- races %>%
+  filter(competition == '1500m') %>%
+  filter(error_tag == 0)
+
+races_id <- races$id
+
+races
+
+
+time_to_seconds <- function(time_str) {
+  parts <- strsplit(time_str, ":")[[1]]
+  minutes <- as.numeric(parts[1])
+  seconds <- as.numeric(parts[2])
+  return(minutes * 60 + seconds)
+}
+
+
+
+laps_id <- race_athlete %>%
+  filter(race_id %in% races_id)
+
+# Change time to seconds
+
+# DA ERROR: laps_id$time <- as.numeric(sapply(laps_id$time, convert_time))
+
+laps_id$time <- time_to_seconds(laps_id$time)
+
+
+# Step 1: Filter and join laps_id to laps, ensuring athlete and race IDs are included
+laps_1500 <- laps %>%
+  filter(race_athlete_id %in% laps_id$id) %>%
+  left_join(laps_id %>% dplyr::select(id, race_id), by = c("race_athlete_id" = "id")) %>%
+  left_join(laps_id %>% dplyr::select(id, athlete_id), by = c("race_athlete_id" = "id")) %>%
+  dplyr::select (-c(race_athlete_id,id))
+
+laps_1500$time <- as.numeric(laps_1500$time)
+
+
+
+
+# Step 2: Summarize the total time of previous laps for each athlete in each race
+laps_summary <- laps_1500 %>%
+  group_by(athlete_id, race_id) %>%
+  summarise(total_previous_time = sum(as.numeric(time), na.rm = TRUE))  # sum time for each athlete per race
+
+# Step 3: Create a new dataframe for lap 15, including the race and athlete IDs
+lap_15 <- laps_id %>%
+  distinct(athlete_id, race_id) %>%
+  left_join(laps_summary, by = c("athlete_id", "race_id")) %>%
+  mutate(number = 15,
+         time =  laps_id$time- total_previous_time ,  # Use the total time of previous laps as the "time" for lap 15
+         position = laps_id$position)  %>%
+  dplyr::select (-total_previous_time)
+
+# Step 4: Combine lap 15 back with the original laps
+laps_1500 <- laps_1500 %>%
+  bind_rows(lap_15)
