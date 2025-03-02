@@ -11,7 +11,8 @@ library(igraph)
 
 distancematrix <- spearman_distance
 
-DM1  <- ifelse(distancematrix < 0.57, 1, 0)
+# DM1  <- ifelse(distancematrix < 0.57, 1, 0) # Data set 1
+DM1  <- ifelse(distancematrix < 0.45, 1, 0) # Data set 2
 diag(DM1) <- 0
 ## Zero out connections where there is low (absolute) correlation
 ## Keeps connection for cor ~ -1

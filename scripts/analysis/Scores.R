@@ -29,3 +29,7 @@ print(paste("Davies-Bouldin Index:", db_index[[1]]))
 # Calinski-Harabasz Index
 ch_index <- intCriteria(as.matrix(data), as.integer(labels), "Calinski_Harabasz")
 print(paste("Calinski-Harabasz Index:", ch_index[[1]]))
+
+cat("&", sprintf("%.4f", silhouette_avg), 
+    "&", sprintf("%.4f", db_index[[1]]), 
+    "&", sprintf("%.4f", ch_index[[1]]), "\\\\\n") # formato para copiar en la tabla de latex

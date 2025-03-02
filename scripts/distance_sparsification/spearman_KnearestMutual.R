@@ -36,7 +36,8 @@ create_mutual_knn_graph <- function(dist_matrix, k) {
 
 
 # Crear la matriz de adyacencia k-NN (k = 5)
-knn_adj_matrix <- create_mutual_knn_graph(as.matrix(distancematrix), k = 9)
+#knn_adj_matrix <- create_mutual_knn_graph(as.matrix(distancematrix), k = 9) # Data set 1
+knn_adj_matrix <- create_mutual_knn_graph(as.matrix(distancematrix), k = 8) # Data set 2
 diag(knn_adj_matrix) <- 0
 
 # Crear el grafo a partir de la matriz de adyacencia

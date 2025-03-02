@@ -38,7 +38,7 @@ ggplot() +
   # Alternatively, you can use scale_y_continuous
   # scale_y_continuous(limits = c(-1.25, 1.25)) +
   # Additional aesthetics
-  labs(title = "Time Series by Cluster using Pearson Correlation + Threshold",
+  labs(title = "",
        x = "Segment",
        y = "Relative Time Improvement",
        color = "Cluster") +

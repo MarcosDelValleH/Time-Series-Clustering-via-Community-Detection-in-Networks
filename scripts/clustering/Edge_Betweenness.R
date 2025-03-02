@@ -25,3 +25,11 @@ visNetwork(network_data$nodes, network_data$edges) %>%
              nodesIdSelection = TRUE) %>%
   visLayout(randomSeed = 42) %>%
   visPhysics(stabilization = TRUE)
+
+ggraph(net, layout = "fr") +  # Usa layout de Fruchterman-Reingold
+  geom_edge_link(aes(alpha = 0.5), color = "grey") +  # Enlaces en gris
+  geom_node_point(aes(color = as.factor(communities$membership), size = degree(net))) +  # Nodos coloreados por cluster
+  scale_color_manual(values = cluster_colors) +  # Escala de colores personalizada
+  theme_void() +  # Tema limpio sin ejes
+  ggtitle("Cosene+knnm+Walktrap") +
+  theme(legend.position = "none")  # Ocultar la leyenda

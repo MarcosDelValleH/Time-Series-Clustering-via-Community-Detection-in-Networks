@@ -10,7 +10,8 @@ library(igraph)
 
 distancematrix <- cor2dist(correlation_matrix)
 
-DM1  <- ifelse(distancematrix < 1.06, 1, 0)
+# DM1  <- ifelse(distancematrix < 1.06, 1, 0) # Data set 1
+DM1  <- ifelse(distancematrix < 0.96, 1, 0) # Data set 2
 diag(DM1) <- 0
 ## Zero out connections where there is low (absolute) correlation
 ## Keeps connection for cor ~ -1
