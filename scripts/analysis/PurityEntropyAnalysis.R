@@ -27,6 +27,10 @@ race_communities <- data.frame(
 athlete_communities <- athlete_race_mapping %>%
   left_join(race_communities, by = "race_id")
 
+# Asegurar que cada atleta tiene una única fila por carrera
+athlete_communities <- athlete_communities %>%
+  distinct(athlete_id, race_id, community)  # Elimina filas repetidas
+
 # Calcular la pureza y entropía por atleta
 athlete_metrics <- athlete_communities %>%
   group_by(athlete_id) %>%
